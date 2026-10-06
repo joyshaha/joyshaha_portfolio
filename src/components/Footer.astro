@@ -1,12 +1,15 @@
 ---
-interface Props {
-  name: string;
-}
-
+import { site } from '../data/site';
+import { ui } from '../data/ui';
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+interface Props { name: string; }
 const { name } = Astro.props;
-const year = new Date().getFullYear();
 ---
-
-<footer class="site-footer">
-  <p>© {year} {name} · Built with Astro</p>
+<footer class="border-t border-line py-7 text-xs text-muted">
+  <div class:list={[ui.container, 'flex flex-wrap items-center justify-between gap-x-6 gap-y-3']}>
+    <p>© {new Date().getFullYear()} {name}</p>
+    <p class="hidden sm:block">Full-stack engineering. Backend & DevOps.</p>
+    <div class="flex gap-6">{site.socials.map(social => <Link href={social.url} class="inline-flex min-h-11 items-center gap-1">{social.label}<Icon name="external" size={15} /></Link>)}</div>
+  </div>
 </footer>

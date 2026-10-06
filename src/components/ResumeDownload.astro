@@ -1,0 +1,12 @@
+---
+import { site } from '../data/site';
+import { ui } from '../data/ui';
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+---
+<Link href={site.resume.url} download={site.resume.filename} type="application/pdf" class={ui.secondary} title={`Download Joy Shaha’s résumé (${site.resume.format}, ${site.resume.size})`}>
+  <Icon name="download" size={18} />
+  <span>Download résumé</span>
+  <span class="rounded bg-panel px-2 py-0.5 font-mono text-[10px] font-medium text-muted">{site.resume.format}</span>
+  <span class="sr-only">, {site.resume.size}</span>
+</Link>

@@ -1,23 +1,73 @@
 ---
-// Componentscript / Frontmatter
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from "../data/site";
+import Link from '../components/Link.astro';
+import Icon from '../components/Icon.astro';
+import Tags from '../components/Tags.astro';
+import SystemIllustration from '../components/SystemIllustration.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CareerCard from '../components/CareerCard.astro';
+import SelectedWork from '../components/SelectedWork.astro';
+import PostCard from '../components/PostCard.astro';
+import EmailContact from '../components/EmailContact.astro';
+import ResumeDownload from '../components/ResumeDownload.astro';
+import { writing } from '../data/writing';
+import { site, toolkit, services, experiences, education, diagramUrl, linkedinActivityUrl } from '../data/site';
+import { ui } from '../data/ui';
 ---
+<BaseLayout title="Full-Stack Engineer · Backend & DevOps" fullWidth>
+  <div class:list={[ui.container, 'py-14 sm:py-20']}>
+    <section id="overview" class="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16" aria-labelledby="overview-title">
+      <div>
+        <p class:list={[ui.eyebrow, 'mb-6']}>SENIOR FULL-STACK ENGINEER / DHAKA, BANGLADESH</p>
+        <h1 id="overview-title" class="mb-6 text-5xl font-semibold tracking-[-0.05em] sm:text-6xl">Hi, I’m Joy Shaha.<br /><span class="text-brand">I connect the stack.</span></h1>
+        <p class="mb-5 max-w-xl text-lg leading-relaxed">A full-stack engineer with a backend focus and DevOps expertise. I build applications from React interfaces to APIs, data workflows, and cloud infrastructure.</p>
+        <p class="mb-7 max-w-xl text-sm leading-relaxed text-muted">My experience spans healthcare and fintech at TechCare and DataSoft. I enjoy turning complex business needs into clear, maintainable systems — and helping teams take them from idea to deployment.</p>
+        <div class="flex flex-wrap gap-3"><Link href="#contact" class={ui.button}>Discuss a project or role<Icon name="arrow" size={18} /></Link><ResumeDownload /></div>
+        <Link href="#work" class:list={[ui.textLink, "mt-3 text-muted"]}>Explore my work<Icon name="arrow" size={18} /></Link>
+        <p class="mt-6 flex items-center gap-2 text-xs text-muted"><span class="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true"></span>Dhaka, Bangladesh · UTC+6</p>
+      </div>
+      <div class="mx-auto w-full max-w-lg"><SystemIllustration /></div>
+    </section>
+    <section class="mt-16 grid gap-6 border-y border-line py-7 sm:grid-cols-3" aria-label="Professional overview">
+      <div><p class="text-xl font-semibold">7+ years</p><p class="mt-1 text-sm text-muted">Software engineering experience</p></div><div><p class="text-xl font-semibold">Healthcare & fintech</p><p class="mt-1 text-sm text-muted">Real business workflows</p></div><div><p class="text-xl font-semibold">Frontend → Cloud</p><p class="mt-1 text-sm text-muted">Connected delivery across the stack</p></div>
+    </section>
+    <section class="mt-16" aria-labelledby="audience-title"><p class:list={[ui.eyebrow, 'mb-4']}>TWO WAYS TO WORK TOGETHER</p><h2 id="audience-title" class="mb-8 text-3xl font-semibold sm:text-4xl">The right experience for your next step.</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="rounded-xl border border-line bg-white p-7 sm:p-9"><span class="mb-5 block text-brand"><Icon name="window" size={27} /></span><h3 class="mb-4 text-2xl font-semibold">For freelance clients</h3><p class="mb-6 text-sm leading-relaxed text-muted">Build a web application, connect business services, improve an existing backend, or create a repeatable cloud deployment workflow.</p><Link href="#services" class={ui.textLink}>See how I can help<Icon name="arrow" size={18} /></Link></article>
+        <article class="rounded-xl border border-line bg-white p-7 sm:p-9"><span class="mb-5 block text-brand"><Icon name="layers" size={27} /></span><h3 class="mb-4 text-2xl font-semibold">For recruiters & teams</h3><p class="mb-6 text-sm leading-relaxed text-muted">Explore my experience delivering healthcare and fintech systems, with strengths in Python backends, integrations, architecture, and DevOps.</p><Link href="#experience" class={ui.textLink}>Explore my experience<Icon name="arrow" size={18} /></Link></article>
+      </div>
+    </section>
+    <section class="mt-16" aria-labelledby="toolkit-title"><p class:list={[ui.eyebrow, 'mb-4']}>A PRACTICAL TOOLKIT</p><h2 id="toolkit-title" class="mb-8 text-3xl font-semibold">From product to production.</h2><div class="grid gap-8 rounded-xl border border-line bg-panel p-7 lg:grid-cols-3">{toolkit.map(group => <div><h3 class="mb-4 text-lg font-semibold">{group.title}</h3><Tags items={group.tools} /></div>)}</div></section>
 
-<BaseLayout title="Home">
-  <section class="hero">
-    <h1>Hi, I'm {site.name} 👋</h1>
-    <p class="muted">{site.role}</p>
-    <p>{site.bio}</p>
-
-    {site.openToWork && <span class="tag">✅ Open to work</span>}
-
-    <ul class="socials">
-      {site.socials.map((social) => (
-        <li><a href={social.url}>{social.label}</a></li>
-      ))}
-    </ul>
-
-    <a href="/blog" class="btn">Read my blog →</a>
-  </section>
+    <section id="services" class="mt-20 border-t border-line pt-14" aria-labelledby="services-title">
+      <SectionHeading number="01" label="Services" title="Your product. The whole picture." id="services-title" description="Full-stack delivery, backend depth, and DevOps support for founders and product teams." />
+      <div class="grid gap-6 lg:grid-cols-3">{services.map(service => <article class="rounded-xl border border-line bg-white p-7"><div class="mb-6 flex items-center justify-between"><span class="text-brand"><Icon name={service.icon} size={26} /></span><span class="font-mono text-xs text-muted">/{service.number}</span></div><h3 class="mb-4 text-2xl font-semibold">{service.title}</h3><p class="mb-6 text-sm leading-relaxed text-muted">{service.description}</p><ul class="space-y-3 border-t border-line pt-5">{service.items.map(item => <li class="flex gap-2 text-sm"><span class="text-brand" aria-hidden="true">—</span>{item}</li>)}</ul></article>)}</div>
+      <p class="mt-6 text-sm text-muted">Cloud knowledge across AWS and GCP, with Terraform and HCL for infrastructure as code.</p>
+    </section>
+    <section id="experience" class="mt-20 border-t border-line pt-14" aria-labelledby="experience-title">
+      <SectionHeading number="02" label="Experience" title="Engineering through real-world work." id="experience-title" />
+      <div class="grid gap-7">{experiences.map((entry, index) => <CareerCard entry={entry} index={index} headingLevel={3} />)}</div>
+    </section>
+    <section id="education" class="mt-20 border-t border-line pt-14" aria-labelledby="education-title">
+      <SectionHeading number="03" label="Education & research" title="An engineering foundation." id="education-title" />
+      <div class="grid gap-7">{education.map((entry, index) => <CareerCard entry={entry} index={index} headingLevel={3} />)}</div>
+      <div class="mt-7 grid gap-7 md:grid-cols-2">
+        <article class="rounded-xl border border-line bg-white p-7"><h3 class="mb-4 text-xl font-semibold">Applied research</h3><ul class="space-y-4 text-sm"><li><Link href="https://ieeexplore.ieee.org/document/7877183" class:list={[ui.textLink, "font-medium"]}>Intelligent Power Management System Using ANN<Icon name="external" size={17} /></Link><p class="mt-1 text-muted">IEEE</p></li><li><Link href="https://engineeringjournals.stmjournals.in/index.php/JoPEPS/article/view/15/0" class:list={[ui.textLink, "font-medium"]}>Arduino-based ANN Power Management System<Icon name="external" size={17} /></Link><p class="mt-1 text-muted">STM Journals</p></li></ul></article>
+        <article class="rounded-xl border border-line bg-white p-7"><h3 class="mb-4 text-xl font-semibold">Professional development</h3><p class="mb-2 font-medium">ACMP-4.0</p><p class="text-sm text-muted">Institute of Business Administration (IBA), University of Dhaka</p></article>
+      </div>
+    </section>
+    <section id="work" class="mt-20 border-t border-line pt-14" aria-labelledby="work-title">
+      <SectionHeading number="04" label="Selected work" title="Real problems. Connected systems." id="work-title" description="Professional contributions through TechCare and DataSoft. Explore the details in each case study." />
+      <SelectedWork />
+    </section>
+    <section id="notes" class="mt-20 border-t border-line pt-14" aria-labelledby="notes-title">
+      <SectionHeading number="05" label="Engineering notes" title="Ideas, code, and connections." id="notes-title" />
+      <div class="mb-7 flex flex-wrap gap-3"><Link href={linkedinActivityUrl} class={ui.secondary}>LinkedIn activity<Icon name="external" size={17} /></Link><Link href={site.socials[0].url} class={ui.secondary}>GitHub projects<Icon name="external" size={17} /></Link><Link href={diagramUrl} class={ui.secondary}>tldraw workspace<Icon name="external" size={17} /></Link></div>
+      <div class="grid gap-6 lg:grid-cols-3">{writing.map(post => <PostCard title={post.title} description={post.summary} category={post.category} readTime={post.readTime} url={`/blog/${post.slug}/`} headingLevel={3} />)}</div>
+    </section>
+    <section id="contact" class="mt-20 border-t border-line pt-14" aria-labelledby="contact-title">
+      <SectionHeading number="06" label="Contact" title="A project, a role, or a conversation." id="contact-title" />
+      <EmailContact />
+    </section>
+  </div>
 </BaseLayout>

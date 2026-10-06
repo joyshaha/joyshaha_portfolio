@@ -1,16 +1,14 @@
 ---
-interface Props {
-  title: string;
-  description: string;
-  pubDate: Date;
-  url: string;
-}
-
-const { title, description, pubDate, url } = Astro.props;
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+interface Props { title: string; description: string; url: string; category?: string; readTime?: string; pubDate?: Date; headingLevel?: 2 | 3; }
+const { title, description, url, category, readTime, pubDate, headingLevel = 2 } = Astro.props;
+const Heading = headingLevel === 3 ? 'h3' : 'h2';
 ---
-
-<a href={url} class="card">
-  <h2>{title}</h2>
-  <p class="muted">{pubDate.toDateString()}</p>
-  <p>{description}</p>
-</a>
+<article class="flex h-full flex-col rounded-xl border border-line bg-white p-7">
+  <p class="mb-5 font-mono text-xs uppercase tracking-wide text-brand">{category || 'Engineering'}{readTime && ` / ${readTime}`}</p>
+  <Heading class="mb-4 text-2xl font-semibold">{title}</Heading>
+  {pubDate && <p class="mb-3 text-xs text-muted">{pubDate.toDateString()}</p>}
+  <p class="mb-6 flex-1 text-sm leading-relaxed text-muted">{description}</p>
+  <Link href={url} class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold">Read the note<Icon name="arrow" size={18} /></Link>
+</article>

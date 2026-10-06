@@ -1,38 +1,40 @@
 ---
-import { site } from '../data/site';
+import { site, navigation } from '../data/site';
+import { ui } from '../data/ui';
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+const isHome = Astro.url.pathname === '/';
 ---
-
-<header>
-  <nav class="container">
-    <a href="/" class="logo">{site.name}</a>
-    <div class="links">
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/blog">Blog</a>
-      <button id="theme-toggle" class="btn btn-outline">🌓</button>
-    </div>
-  </nav>
+<header id="site-navigation" class="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur-md">
+  <div class:list={[ui.container, 'flex flex-wrap items-center justify-between gap-x-6 py-3']}>
+    <Link href={isHome ? '#overview' : '/#overview'} class="flex min-h-11 items-center gap-3 text-sm font-semibold" aria-label="Joy Shaha home"><span class="text-3xl font-bold tracking-tighter" aria-hidden="true">js<span class="text-brand">.</span></span>{site.name}</Link>
+    <nav class="order-3 w-full min-w-0 border-t border-line pt-2 xl:order-none xl:w-auto xl:border-0 xl:pt-0" aria-label="Portfolio sections">
+      <ul class="flex flex-wrap justify-center gap-1 sm:gap-2">{navigation.map(item => <li><Link href={isHome ? item.href.slice(1) : item.href} data-section-link={isHome ? item.href.split('#')[1] : undefined} class="inline-flex min-h-11 items-center rounded-md px-2 text-xs text-muted hover:bg-brand-soft hover:text-brand aria-[current=location]:bg-brand-soft aria-[current=location]:font-semibold aria-[current=location]:text-brand sm:px-3 sm:text-sm">{item.label}</Link></li>)}</ul>
+    </nav>
+    <Link href={isHome ? '#contact' : '/#contact'} data-section-link={isHome ? "contact" : undefined} class="inline-flex min-h-11 items-center gap-2 rounded-md border border-line px-4 py-2 text-sm font-medium aria-[current=location]:border-brand aria-[current=location]:text-brand">Let’s talk<Icon name="arrow" size={17} /></Link>
+  </div>
 </header>
-
-<style>
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-  }
-  .links { display: flex; align-items: center; gap: 20px; }
-  .logo { font-weight: 700; color: var(--text); }
-</style>
-
 <script>
-  const root = document.documentElement;
-  const saved = localStorage.getItem('theme');
-  if (saved) root.dataset.theme = saved;
-
-  document.getElementById('theme-toggle')?.addEventListener('click', () => {
-    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    localStorage.setItem('theme', next);
-  });
+  const header = document.getElementById('site-navigation');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-section-link]')];
+  const sections = links.map(link => document.getElementById(link.dataset.sectionLink ?? '')).filter((section): section is HTMLElement => section !== null);
+  let queued = false;
+  const update = () => {
+    const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const offset = Math.max(header?.getBoundingClientRect().height ?? 0, scrollPadding) + 24;
+    let active = sections[0]?.id;
+    for (const section of sections) if (section.getBoundingClientRect().top <= offset) active = section.id;
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 16) active = sections.at(-1)?.id ?? active;
+    for (const link of links) {
+      if (link.dataset.sectionLink === active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    queued = false;
+  };
+  if (links.length) {
+    update();
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('hashchange', update);
+  }
 </script>

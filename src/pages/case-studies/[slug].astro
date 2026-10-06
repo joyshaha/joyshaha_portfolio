@@ -1,0 +1,27 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Tags from '../../components/Tags.astro';
+import Link from '../../components/Link.astro';
+import Icon from '../../components/Icon.astro';
+import FlowDiagram from '../../components/FlowDiagram.astro';
+import CallToAction from '../../components/CallToAction.astro';
+import { caseStudies, type CaseStudy } from '../../data/case-studies';
+import { ui } from '../../data/ui';
+export const getStaticPaths = (() => caseStudies.map(study => ({ params: { slug: study.slug }, props: { study } }))) satisfies GetStaticPaths;
+interface Props { study: CaseStudy; }
+const { study } = Astro.props;
+---
+<BaseLayout title={`${study.name} · Case study`} description={study.summary}>
+  <Link href="/case-studies/" class:list={[ui.textLink, 'mb-8']}>All case studies<Icon name="arrow" size={17} /></Link>
+  <PageHeading eyebrow={`${study.category} / ${study.name}`} title={study.headline} description={study.summary} />
+  <dl class="mb-10 grid gap-6 border-y border-line py-6 sm:grid-cols-3"><div><dt class="mb-2 text-xs text-muted">EMPLOYER</dt><dd class="text-sm font-semibold">{study.employer}</dd></div><div><dt class="mb-2 text-xs text-muted">MY ROLE</dt><dd class="text-sm font-semibold">{study.role}</dd></div><div><dt class="mb-2 text-xs text-muted">PERIOD</dt><dd class="text-sm font-semibold">{study.period}</dd></div></dl>
+  <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr]"><section><h2 class="mb-4 text-2xl font-semibold">The context</h2><p class="mb-8 text-base leading-relaxed text-muted">{study.context}</p><h2 class="mb-4 text-2xl font-semibold">The engineering challenge</h2><p class="text-base leading-relaxed text-muted">{study.challenge}</p></section><FlowDiagram steps={study.flow} tone={study.tone} title={`${study.name} / Workflow`} /></div>
+  <section class="mt-14" aria-labelledby="contributions-title"><p class:list={[ui.eyebrow, 'mb-4']}>MY CONTRIBUTIONS</p><h2 id="contributions-title" class="mb-8 text-3xl font-semibold">Where I worked on the system.</h2><div class="grid gap-6 md:grid-cols-3">{study.contributions.map((item, index) => <article class="rounded-xl border border-line bg-white p-7"><span class="mb-5 block font-mono text-xs text-brand">0{index + 1}</span><h3 class="mb-4 text-xl font-semibold">{item.title}</h3><p class="text-sm leading-relaxed text-muted">{item.description}</p></article>)}</div></section>
+  <section class="mt-10 rounded-xl border border-line bg-panel p-7 sm:p-9"><h2 class="mb-4 text-2xl font-semibold">What this work supported</h2><p class="mb-6 max-w-3xl text-sm leading-relaxed text-muted">{study.outcome}</p><h3 class="mb-3 text-lg font-semibold">Engineering perspective</h3><p class="max-w-3xl text-sm leading-relaxed text-muted">{study.takeaway}</p></section>
+  <section class="mt-10"><h2 class="mb-5 text-2xl font-semibold">Technologies</h2><Tags items={study.tags} /></section>
+  {study.links.length > 0 && <section class="mt-10"><h2 class="mb-5 text-2xl font-semibold">Explore the platform</h2><div class="flex flex-wrap gap-3">{study.links.map(link => <Link href={link.href} class={ui.secondary}>{link.label}<Icon name="external" size={17} /></Link>)}</div><p class="mt-4 text-xs text-muted">Application and administration portals may require an account.</p></section>}
+  <p class="mt-10 border-t border-line pt-5 text-xs text-muted">Professional contribution through {study.employer}. This overview describes my role; it does not represent sole ownership of the platform. Diagrams are conceptual.</p>
+  <CallToAction />
+</BaseLayout>
