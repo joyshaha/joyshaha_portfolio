@@ -1,31 +1,20 @@
 ---
-import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LikeButton from '../../components/LikeButton.jsx';
-
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post },
-  }));
-}
-
+import PageHeading from '../../components/PageHeading.astro';
+import Link from '../../components/Link.astro';
+import Icon from '../../components/Icon.astro';
+import { writing } from '../../data/writing';
+import { ui } from '../../data/ui';
+export const getStaticPaths = (() => writing.map(post => ({ params: { id: post.slug }, props: { post } }))) satisfies GetStaticPaths;
+interface Props { post: (typeof writing)[number]; }
 const { post } = Astro.props;
-const { Content } = await render(post);
 ---
-
-<BaseLayout title={post.data.title}>
-  <article class="prose">
-    <h1>{post.data.title}</h1>
-    <p class="muted">{post.data.pubDate.toDateString()}</p>
-    <div class="tags">
-      {post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
-    </div>
-
-    <Content />
-  </article>
-
-  <LikeButton client:visible />
-  <!-- <LikeButton client:load /> -->
+<BaseLayout title={post.title} description={post.summary}>
+  <Link href="/blog/" class:list={[ui.textLink, 'mb-8']}>All engineering notes<Icon name="arrow" size={17} /></Link>
+  <PageHeading eyebrow={`${post.category} / ${post.readTime}`} title={post.title} description={post.summary} />
+  <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+    <article class="space-y-9 rounded-xl border border-line bg-white p-7 sm:p-10">{post.sections.map(section => <section><h2 class="mb-4 text-2xl font-semibold">{section.title}</h2><p class="text-base leading-8 text-muted">{section.body}</p></section>)}</article>
+    <aside class="h-fit rounded-xl border border-line bg-panel p-7" aria-label="Related code, posts, and diagrams"><p class:list={[ui.eyebrow, 'mb-4']}>KEEP EXPLORING</p><h2 class="mb-5 text-2xl font-semibold">Connect the ideas.</h2><div class="flex flex-col items-start gap-3"><Link href={post.repository} class={ui.textLink}>Related GitHub project<Icon name="external" size={17} /></Link><Link href={post.linkedinUrl} class={ui.textLink}>My LinkedIn activity<Icon name="external" size={17} /></Link><Link href={post.diagramUrl} class={ui.textLink}>Open tldraw workspace<Icon name="external" size={17} /></Link></div><p class="mt-5 text-xs leading-relaxed text-muted">The tldraw link opens the shared architecture workspace. This note is not a reproduction of a LinkedIn article.</p></aside>
+  </div>
 </BaseLayout>

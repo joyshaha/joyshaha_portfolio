@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+const layers = [
+  { icon: 'window', label: '01 / EXPERIENCE', title: 'The interface', detail: 'React · Web applications' },
+  { icon: 'layers', label: '02 / ENGINEERING', title: 'The backbone', detail: 'APIs · Services · Data' },
+  { icon: 'cloud', label: '03 / DELIVERY', title: 'The infrastructure', detail: 'AWS · GCP · Terraform · CI/CD' },
+];
+---
+<div class="rounded-xl border border-line bg-white shadow-xl shadow-slate-200/50 lg:rotate-1" role="img" aria-label="My full-stack focus connects React interfaces, backend APIs and data, and cloud infrastructure with AWS, GCP, Terraform, and CI/CD.">
+  <div aria-hidden="true">
+    <p class="flex items-center gap-2 border-b border-line px-5 py-5 font-mono text-xs text-muted"><span class="h-1.5 w-1.5 rounded-full bg-brand"></span>INTERFACE TO INFRASTRUCTURE</p>
+    <div class="p-5 sm:p-7">{layers.map((layer, index) => <>
+      <div class:list={['flex items-center gap-3 rounded-lg border p-4 sm:p-5', index === 1 ? 'border-brand bg-brand-soft' : 'border-line bg-white']}>
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-canvas text-brand"><Icon name={layer.icon} size={24} /></span>
+        <div class="min-w-0"><p class="mb-1 font-mono text-[10px] tracking-wide text-muted">{layer.label}</p><p class="text-base font-semibold">{layer.title}</p><p class="mt-1 text-xs text-muted">{layer.detail}</p></div>
+      </div>
+      {index < 2 && <div class="ml-10 flex h-8 items-center gap-3 border-l border-dashed border-line pl-3 font-mono text-[10px] text-muted">{index === 0 ? 'request / response' : 'build / deploy'}</div>}
+    </>)}</div>
+    <p class="flex justify-between border-t border-line px-5 py-4 font-mono text-xs text-muted">One connected system.<span class="text-brand">&lt;/&gt;</span></p>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+interface Props extends Omit<HTMLAttributes<'a'>, 'target' | 'rel'> { href: string; }
+const { href, class: className, ...attributes } = Astro.props;
+const isExternal = /^(https?:)?\/\//i.test(href);
+const isEmail = href.startsWith('mailto:');
+---
+<a href={href} class={className} {...attributes} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined}>
+  <slot />
+  {isExternal && <span class="sr-only"> (opens in a new tab)</span>}
+  {isEmail && <span class="sr-only"> (opens your email application)</span>}
+</a>

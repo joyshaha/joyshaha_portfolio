@@ -1,0 +1,17 @@
+---
+import Tags from './Tags.astro';
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+import { ui } from '../data/ui';
+interface Props { entry: { organization: string; role: string; period: string; location: string; overview: string; details: string[]; tags: string[]; link?: string; linkLabel?: string; }; index: number; headingLevel?: 2 | 3; }
+const { entry, index, headingLevel = 2 } = Astro.props;
+const Heading = headingLevel === 3 ? 'h3' : 'h2';
+---
+<article class="grid gap-6 rounded-xl border border-line bg-white p-6 sm:p-9 md:grid-cols-[190px_1fr] md:gap-10">
+  <div><span class="mb-5 block font-mono text-sm text-brand">/0{index + 1}</span><p class="text-sm font-semibold">{entry.period}</p><p class="mt-2 text-xs text-muted">{entry.location}</p></div>
+  <div><Heading class="mb-2 text-2xl font-semibold">{entry.organization}</Heading><p class="mb-5 text-base font-medium text-brand">{entry.role}</p><p class="mb-5 max-w-2xl text-sm leading-relaxed text-muted">{entry.overview}</p>
+    <ul class="mb-6 space-y-3">{entry.details.map(detail => <li class="flex gap-3 text-sm"><span class="mt-0.5 shrink-0 text-brand"><Icon name="check" size={16} /></span>{detail}</li>)}</ul>
+    <Tags items={entry.tags} />
+    {entry.link && <Link href={entry.link} class:list={[ui.textLink, 'mt-5']}>{entry.linkLabel}<Icon name="arrow" size={17} /></Link>}
+  </div>
+</article>

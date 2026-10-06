@@ -1,0 +1,10 @@
+---
+import { ui } from '../data/ui';
+interface Props { eyebrow: string; title: string; description?: string; }
+const { eyebrow, title, description } = Astro.props;
+---
+<div class="mb-12 max-w-3xl">
+  <p class:list={[ui.eyebrow, 'mb-5']}><span class="mr-3 text-brand">/</span>{eyebrow}</p>
+  <h1 class="mb-6 text-4xl font-semibold tracking-[-0.04em] sm:text-5xl lg:text-6xl">{title}</h1>
+  {description && <p class="max-w-2xl text-lg leading-relaxed text-muted">{description}</p>}
+</div>

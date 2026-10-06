@@ -1,0 +1,11 @@
+---
+import { ui } from '../data/ui';
+import Link from './Link.astro';
+import Icon from './Icon.astro';
+---
+<section class="mt-16 rounded-xl bg-night px-6 py-10 text-white sm:px-10">
+  <div class="flex flex-col justify-between gap-7 md:flex-row md:items-center">
+    <div><p class="mb-3 font-mono text-xs uppercase tracking-widest text-blue-200">PROJECT OR OPPORTUNITY?</p><h2 class="mb-3 text-3xl font-semibold">Let’s talk about what’s next.</h2><p class="max-w-xl text-sm leading-relaxed text-slate-300">A freelance project, an existing product, or a role on your team — start with a conversation.</p></div>
+    <Link href="/#contact" class:list={[ui.secondary, 'shrink-0']}>Get in touch <Icon name="arrow" size={18} /></Link>
+  </div>
+</section>

@@ -1,0 +1,16 @@
+---
+import { caseStudies } from '../data/case-studies';
+import Link from './Link.astro';
+import Tags from './Tags.astro';
+import FlowDiagram from './FlowDiagram.astro';
+import Icon from './Icon.astro';
+import { ui } from '../data/ui';
+interface Props { limit?: number; }
+const { limit = caseStudies.length } = Astro.props;
+---
+<div class="grid gap-7">
+  {caseStudies.slice(0, limit).map(study => <article class="grid overflow-hidden rounded-xl border border-line bg-white md:grid-cols-2">
+    <div class="p-4"><FlowDiagram steps={study.flow} tone={study.tone} title={study.category} /></div>
+    <div class="flex flex-col justify-center p-6 sm:p-8"><p class:list={[ui.eyebrow, 'mb-3']}>{study.employer}</p><h3 class="mb-3 text-3xl font-semibold">{study.name}</h3><p class="mb-5 text-sm leading-relaxed text-muted">{study.summary}</p><Tags items={study.tags} /><Link href={`/case-studies/${study.slug}/`} class:list={[ui.textLink, 'mt-5']}>Read the case study<Icon name="arrow" size={18} /></Link></div>
+  </article>)}
+</div>
